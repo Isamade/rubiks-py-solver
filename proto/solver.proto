@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package rubiks_solver;
+
+message Piece {
+    repeated float position = 1; // [x, y, z]
+    repeated string colors = 2;   // 6 colors in order: Front, Back, Top, Bottom, Right, Left
+}
+
+message CubeState {
+    repeated Piece pieces = 1;
+}
+
+message SolveRequest {
+    CubeState state = 1;
+}
+
+message SolveResponse {
+    repeated string moves = 1; // e.g., ["U", "R'", "F2"]
+    string message = 2;        // Status or error message
+}
+
+service RubiksSolver {
+    rpc SolveAlgorithmic(SolveRequest) returns (SolveResponse);
+    rpc SolveNeuralNetwork(SolveRequest) returns (SolveResponse);
+    rpc SolveReinforcementLearning(SolveRequest) returns (SolveResponse);
+}
