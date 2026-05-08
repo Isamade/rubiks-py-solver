@@ -12,6 +12,7 @@ RUN apt-get update && \
 COPY . .
 
 # Generate protobuf files
-RUN python -m grpc_tools.protoc -I./proto --python_out=./src/generated --grpc_python_out=./src/generated ./proto/solver.proto
+RUN mkdir -p ./src/generated && \
+    python -m grpc_tools.protoc -I./proto --python_out=./src/generated --grpc_python_out=./src/generated ./proto/solver.proto
 
 CMD ["python", "src/server.py"]
