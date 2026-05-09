@@ -3,3 +3,4 @@ grpcio-tools
 kociemba
 numpy
 rubik-solver
+aio-pika

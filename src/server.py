@@ -9,6 +9,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'generated'))
 import solver_pb2
 import solver_pb2_grpc
 from solvers import algorithmic
+import threading
+from consumer import start_consumer
 
 class RubiksSolverServicer(solver_pb2_grpc.RubiksSolverServicer):
     def SolveAlgorithmic(self, request, context):
@@ -31,6 +33,12 @@ def serve():
     solver_pb2_grpc.add_RubiksSolverServicer_to_server(RubiksSolverServicer(), server)
     server.add_insecure_port('[::]:50051')
     print("Rubik's Solver Server starting on port 50051...")
+    
+    # Start RabbitMQ consumer in a background thread
+    consumer_thread = threading.Thread(target=start_consumer, daemon=True)
+    consumer_thread.start()
+    print("RabbitMQ consumer started in background thread.")
+    
     server.start()
     server.wait_for_termination()
 
